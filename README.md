@@ -42,6 +42,19 @@ MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll
 
 > This table above is originally attached to the [dataset](https://www.kaggle.com/competitions/GiveMeSomeCredit/overview)
 
+### Dataset statistics (train_df.describe())
+
+| Statystyka | SeriousDlqin2yrs | RevolvingUtilization | age | NumberOfTime30-59 | DebtRatio | MonthlyIncome | NumberOfOpenCredit | NumberOfTimes90DaysLate | NumberRealEstate | NumberOfTime60-89 | NumberOfDependents |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| count | 150000 | 150000 | 150000 | 150000 | 150000 | 120269 | 150000 | 150000 | 150000 | 150000 | 146076 |
+| mean | 0.067 | 6.048 | 52.30 | 0.421 | 353.005 | 6670.22 | 8.453 | 0.266 | 1.018 | 0.240 | 0.757 |
+| std | 0.250 | 249.755 | 14.77 | 4.193 | 2037.82 | 14384.67 | 5.146 | 4.169 | 1.130 | 4.155 | 1.115 |
+| min | - | - | - | - | - | - | - | - | - | - | - |
+| 25% | - | 0.030 | 41.0 | - | 0.175 | 3400.0 | 5.0 | - | - | - | - |
+| 50% | - | 0.154 | 52.0 | - | 0.367 | 5400.0 | 8.0 | - | 1.0 | - | - |
+| 75% | - | 0.559 | 63.0 | - | 0.868 | 8249.0 | 11.0 | - | 2.0 | - | 1.0 |
+| max | 1.0 | 50708.0 | 109.0 | 98.0 | 329664.0 | 3008750.0 | 58.0 | 98.0 | 54.0 | 98.0 | 20.0 |
+
 ---
 
 ## My approach
@@ -49,7 +62,7 @@ MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll
 Since in this dataset I got labeled data supervised learning classification models are a natural initial approach.
 
 * [✅] First step is to handle missing values and explore the data
-* [✅] asdasd
+* [✅] X
 
 
 ---
@@ -60,4 +73,4 @@ Since in this dataset I got labeled data supervised learning classification mode
 * pandas
 * sklearn
 * numpy
-
+* seaborn
