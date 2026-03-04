@@ -4,7 +4,13 @@
 
 TLDR: I want to predict if my client will have trouble paying off their debt based on historical client data.
 
+Current AUC: 0.84149
 
+* I'm still trying to impove the model
+
+0.5 - random model, 0.5-1.0 - better than random, 1.0 - perfect model
+
+Currently my model has ~68% advantage over randomness
 
 ## Data description
 
@@ -24,6 +30,8 @@ only 7.16% positive, meaning that accuracy will not work out in this scenerio (m
 
 MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll use median in both cases
 
+
+### variables description
 
 
 | Variable Name | Description | Type |
