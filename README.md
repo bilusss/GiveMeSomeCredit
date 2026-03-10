@@ -4,13 +4,14 @@
 
 TLDR: I want to predict if my client will have trouble paying off their debt based on historical client data.
 
-Current AUC: 0.84149
+Current **AUC**: ```0.84149```,
+0.5 - random model, 0.5-1.0 - better than random, 1.0 - perfect model
+
+Current **GINI**: ```2 * AUC - 1 = 0.68298```, 
+currently my model has ~68% advantage over randomness
 
 * I'm still trying to impove the model
 
-0.5 - random model, 0.5-1.0 - better than random, 1.0 - perfect model
-
-Currently my model has ~68% advantage over randomness
 
 ## Data description
 
@@ -70,7 +71,7 @@ MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll
 Since in this dataset I got labeled data supervised learning classification models are a natural initial approach.
 
 * [✅] First step is to handle missing values and explore the data
-* [✅] X
+* [✅] 
 
 
 ---
