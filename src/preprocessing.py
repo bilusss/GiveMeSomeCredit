@@ -34,7 +34,7 @@ def feature_engieneering(df) -> pd.DataFrame:
 
 def remove_first_column(df) -> pd.DataFrame:
   df = df.copy()
-  df.drop('Unnamed: 0', axis=1)
+  df.drop('Unnamed: 0', axis=1, inplace=True)
   # axis=1 must be added to remove column not a row (axis=0)
   return df
 
