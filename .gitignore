@@ -5,3 +5,7 @@ Data Dictionary.xls
 sampleEntry.csv
 submission.csv
 .github/
+.vscode/
+*/__pycache__/
+train.csv
+test.csv
