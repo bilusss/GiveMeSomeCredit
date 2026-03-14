@@ -5,5 +5,3 @@ submission.csv
 .github/
 .vscode/
 */__pycache__/
-train.csv
-test.csv
