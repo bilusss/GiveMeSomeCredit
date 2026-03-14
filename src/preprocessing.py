@@ -38,6 +38,11 @@ def remove_first_column(df) -> pd.DataFrame:
   # axis=1 must be added to remove column not a row (axis=0)
   return df
 
+def remove_target_column(df) -> pd.Dataframe:
+  df = df.copy()
+  df.drop('SeriousDlqin2yrs', axis=1, inplace=True)
+  return df
+
 def save_processed(df, path) -> None:
   df.to_csv(path, index=False)
   print(f"Saved {len(df)} rows to {path}")

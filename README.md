@@ -68,10 +68,31 @@ MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll
 
 ## My approach
 
-Since in this dataset I got labeled data supervised learning classification models are a natural initial approach.
+since in this dataset i got labeled data supervised learning classification models are a natural initial approach
 
-* [✅] First step is to handle missing values and explore the data
-* [✅] 
+### 1. EDA (`01_eda.ipynb`)
+
+* [✅] looked at the data, found nulls in MonthlyIncome (19.82%) and NumberOfDependents (2.62%), decided to fill with median
+* [✅] confirmed class imbalance (93% negative, 7% positive) so accuracy won't work here, using AUC
+* [✅] found data entry errors using boxplots - age=0 is impossible so i drop rows where age < 18, also some columns have values 96/98 which are just error codes (drop rows where value > 90), also DebtRatio looks weird when MonthlyIncome is 0
+* [✅] correlation heatmap
+
+### 2. Preprocessing (`02_preprocessing.ipynb` + `src/preprocessing.py`)
+
+* [✅] dropped rows where age < 18
+* [✅] filled nulls using median but per age group (bins: 0-30, 30-45, 45-60, 60-75, 75-120) to be more precise
+* [✅] to avoid data leakage i compute medians only on train set and then apply them to test set
+* [✅] added two new features: MonthlyDebt (DebtRatio * MonthlyIncome) and TotalLatePayments (sum of all three late payment columns)
+* [✅] dropped the Unnamed: 0 index column and saved processed data
+
+### 3. Modeling (`03_modeling.ipynb`)
+
+* [✅] loaded data, split into X and y
+* [~~⬜~~] ~~use SMOTE to handle class imbalance~~ won't do this, i'll use class_weight instead
+* [⬜] compare logistic regression, random forest and gradient boosting using stratified k-fold cross validation (AUC score)
+* [⬜] use StandardScaler in a Pipeline so there's no leakage during cross-validation
+* [⬜] tune the best model
+* [⬜] generate submission file
 
 
 ---
