@@ -1,106 +1,129 @@
 # GiveMeSomeCredit
 
-## My goal
+Kaggle competition: predict if a client will default on debt (binary classification).
 
-TLDR: I want to predict if my client will have trouble paying off their debt based on historical client data.
+## Results
 
-Current **AUC**: ```0.84149```,
-0.5 - random model, 0.5-1.0 - better than random, 1.0 - perfect model
+| Metric | Value |
+|--------|-------|
+| **Kaggle Private Score** | 0.86678 |
+| **AUC (CV)** | 0.8656 ± 0.0036 |
+| **GINI** | 0.7334 |
 
-Current **GINI**: ```2 * AUC - 1 = 0.68298```, 
-currently my model has ~68% advantage over randomness
+**Best model**: Gradient Boosting (n_estimators=300, max_depth=5, learning_rate=0.05, subsample=0.8)
 
-* I'm still trying to impove the model
-
-
-## Data description
-
-
-* ~250k examples
-
-* 150k training (~10k positive, ~140k negative)
-
-
-### important mentions about this exact dataset:
-
-#### **UNBALANCED DATA** 
-
-only 7.16% positive, meaning that accuracy will not work out in this scenerio (model would predict negative and still achive +90% accuracy) so AUC (Area Under Curve) is a better metric
-
-#### **NULLs** 
-
-MonthlyIncome has null in 19.82% of examples, NumberOfDependents has 2.62%, i'll use median in both cases
-
-
-### variables description
-
-
-| Variable Name | Description | Type |
-| :--- | --- | ---: |
-| **SeriousDlqin2yrs (target)** | **Person experienced 90 days past due delinquency or worse** | **Y/N** |
-| RevolvingUtilizationOfUnsecuredLines | Total balance on credit cards and personal lines of credit except real estate and no installment debt like car loans divided by the sum of credit limits | percentage |
-| age | Age of borrower in years | integer |
-| NumberOfTime30-59DaysPastDueNotWorse | Number of times borrower has been 30-59 days past due but no worse in the last 2 years. | integer |
-| DebtRatio | Monthly debt payments, alimony, living costs divided by monthly gross income | percentage |
-| MonthlyIncome | Monthly income | real |
-| NumberOfOpenCreditLinesAndLoans | Number of Open loans (installment like car loan or mortgage) and Lines of credit (e.g. credit cards) | integer |
-| NumberOfTimes90DaysLate | Number of times borrower has been 90 days or more past due. | integer |
-| NumberRealEstateLoansOrLines | Number of mortgage and real estate loans including home equity lines of credit | integer |
-| NumberOfTime60-89DaysPastDueNotWorse | Number of times borrower has been 60-89 days past due but no worse in the last 2 years. | integer |
-| NumberOfDependents | Number of dependents in family excluding themselves (spouse, children etc.) | integer |
-
-> This table above is originally attached to the [dataset](https://www.kaggle.com/competitions/GiveMeSomeCredit/overview)
-
-### Dataset statistics (train_df.describe())
-
-| Statystyka | SeriousDlqin2yrs | RevolvingUtilization | age | NumberOfTime30-59 | DebtRatio | MonthlyIncome | NumberOfOpenCredit | NumberOfTimes90DaysLate | NumberRealEstate | NumberOfTime60-89 | NumberOfDependents |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| count | 150000 | 150000 | 150000 | 150000 | 150000 | 120269 | 150000 | 150000 | 150000 | 150000 | 146076 |
-| mean | 0.067 | 6.048 | 52.30 | 0.421 | 353.005 | 6670.22 | 8.453 | 0.266 | 1.018 | 0.240 | 0.757 |
-| std | 0.250 | 249.755 | 14.77 | 4.193 | 2037.82 | 14384.67 | 5.146 | 4.169 | 1.130 | 4.155 | 1.115 |
-| min | - | - | - | - | - | - | - | - | - | - | - |
-| 25% | - | 0.030 | 41.0 | - | 0.175 | 3400.0 | 5.0 | - | - | - | - |
-| 50% | - | 0.154 | 52.0 | - | 0.367 | 5400.0 | 8.0 | - | 1.0 | - | - |
-| 75% | - | 0.559 | 63.0 | - | 0.868 | 8249.0 | 11.0 | - | 2.0 | - | 1.0 |
-| max | 1.0 | 50708.0 | 109.0 | 98.0 | 329664.0 | 3008750.0 | 58.0 | 98.0 | 54.0 | 98.0 | 20.0 |
+**Top 3 features**: TotalLatePayments, RevolvingUtilizationOfUnsecuredLines, NumberOfTimes90DaysLate
 
 ---
 
-## My approach
+## Project Structure
 
-since in this dataset i got labeled data supervised learning classification models are a natural initial approach
+```
+GiveMeSomeCredit/
+├── notebooks/
+│   ├── 01_eda.ipynb              # Exploratory Data Analysis
+│   ├── 02_preprocessing.ipynb    # Data cleaning & feature engineering
+│   ├── 03_modeling.ipynb         # Model training & hyperparameter tuning
+│   └── 04_evaluation.ipynb       # Performance analysis & visualizations
+├── src/
+│   └── preprocessing.py          # Reusable preprocessing functions
+├── data/
+│   ├── raw/                      # Original Kaggle data
+│   └── processed/                # Cleaned train/test CSVs
+├── submission.csv                # Final Kaggle submission
+└── requirements.txt
+```
+
+---
+
+## Data Description
+
+- **~250k examples** (150k train, 100k test)
+- **7% positive class** (imbalanced - accuracy won't work, using AUC)
+- **Missing values**: MonthlyIncome (19.82%), NumberOfDependents (2.62%)
+
+### Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| **SeriousDlqin2yrs** | Person experienced 90+ days past due delinquency (TARGET) | binary |
+| RevolvingUtilizationOfUnsecuredLines | Credit utilization ratio | % |
+| age | Age of borrower | int |
+| NumberOfTime30-59DaysPastDueNotWorse | Times 30-59 days late (last 2 years) | int |
+| DebtRatio | Monthly debt / gross income | % |
+| MonthlyIncome | Monthly income | real |
+| NumberOfOpenCreditLinesAndLoans | Open loans and credit lines | int |
+| NumberOfTimes90DaysLate | Times 90+ days late | int |
+| NumberRealEstateLoansOrLines | Mortgage/real estate loans | int |
+| NumberOfTime60-89DaysPastDueNotWorse | Times 60-89 days late (last 2 years) | int |
+| NumberOfDependents | Family dependents | int |
+
+> Source: [Kaggle Competition](https://www.kaggle.com/competitions/GiveMeSomeCredit/overview)
+
+---
+
+## Approach
 
 ### 1. EDA (`01_eda.ipynb`)
 
-* [✅] looked at the data, found nulls in MonthlyIncome (19.82%) and NumberOfDependents (2.62%), decided to fill with median
-* [✅] confirmed class imbalance (93% negative, 7% positive) so accuracy won't work here, using AUC
-* [✅] found data entry errors using boxplots - age=0 is impossible so i drop rows where age < 18, also some columns have values 96/98 which are just error codes (drop rows where value > 90), also DebtRatio looks weird when MonthlyIncome is 0
-* [✅] correlation heatmap
+- [x] Identified nulls in MonthlyIncome (19.82%) and NumberOfDependents (2.62%)
+- [x] Confirmed class imbalance (93%/7%) - switched to AUC metric
+- [x] Found data entry errors: age=0, error codes 96/98 in late payment columns
+- [x] Correlation heatmap analysis
 
 ### 2. Preprocessing (`02_preprocessing.ipynb` + `src/preprocessing.py`)
 
-* [✅] dropped rows where age < 18
-* [✅] filled nulls using median but per age group (bins: 0-30, 30-45, 45-60, 60-75, 75-120) to be more precise
-* [✅] to avoid data leakage i compute medians only on train set and then apply them to test set
-* [✅] added two new features: MonthlyDebt (DebtRatio * MonthlyIncome) and TotalLatePayments (sum of all three late payment columns)
-* [✅] dropped the Unnamed: 0 index column and saved processed data
+- [x] Dropped rows where age < 18
+- [x] Filled nulls with median per age group (bins: 0-30, 30-45, 45-60, 60-75, 75-120)
+- [x] Avoided data leakage: medians computed on train set only
+- [x] Feature engineering:
+  - `MonthlyDebt` = DebtRatio × MonthlyIncome
+  - `TotalLatePayments` = sum of all late payment columns
+- [x] Removed index column, saved processed data
 
 ### 3. Modeling (`03_modeling.ipynb`)
 
-* [✅] loaded data, split into X and y
-* [~~⬜~~] ~~use SMOTE to handle class imbalance~~ won't do this, i'll use class_weight instead
-* [⬜] compare logistic regression, random forest and gradient boosting using stratified k-fold cross validation (AUC score)
-* [⬜] use StandardScaler in a Pipeline so there's no leakage during cross-validation
-* [⬜] tune the best model
-* [⬜] generate submission file
+- [x] Compared 4 models with StratifiedKFold CV:
 
+| Model | AUC |
+|-------|-----|
+| Logistic Regression | 0.7905 |
+| Random Forest | 0.8364 |
+| XGBoost | 0.8490 |
+| **Gradient Boosting** | **0.8646** |
+
+- [x] Pipeline with StandardScaler (prevents data leakage)
+- [x] Hyperparameter tuning with RandomizedSearchCV
+- [x] Generated Kaggle submission
+
+### 4. Evaluation (`04_evaluation.ipynb`)
+
+- [x] Cross-validation performance analysis
+- [x] Feature importance visualization
+- [x] ROC curve and Precision-Recall curves
+- [x] Prediction distribution by class
 
 ---
 
-### Tools used
+## Quick Start
 
-* python
-* pandas
-* sklearn
-* numpy
-* seaborn
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run notebooks in order:
+# 1. 01_eda.ipynb
+# 2. 02_preprocessing.ipynb
+# 3. 03_modeling.ipynb
+# 4. 04_evaluation.ipynb
+```
+
+---
+
+## Tech Stack
+
+- Python 3.14
+- pandas, numpy
+- scikit-learn, xgboost
+- matplotlib, seaborn
+- Jupyter
